@@ -1,113 +1,128 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+// import { useCompletion } from 'ai/react';
+
+// export default function Completion() {
+//   const {
+//     completion,
+//     input,
+//     stop,
+//     isLoading,
+//     handleInputChange,
+//     handleSubmit,
+//   } = useCompletion();
+
+//   return (
+//     <div className="mx-auto w-full max-w-md py-24 flex flex-col stretch">
+//       <form onSubmit={handleSubmit}>
+//         <label>
+//           Say something...
+//           <input
+//             className="input input-bordered w-full max-w-xs"
+//             value={input}
+//             onChange={handleInputChange}
+//           />
+//         </label>
+//         <output>Completion result: {completion}</output>
+//         <button type="button" onClick={stop}>
+//           Stop
+//         </button>
+//         <button disabled={isLoading} type="submit">
+//           Send
+//         </button>
+//       </form>
+//     </div>
+//   );
+// }
+
+import { useCompletion } from "ai/react";
+
+export default function Completion() {
+  const {
+    completion,
+    input,
+    stop,
+    isLoading,
+    handleInputChange,
+    handleSubmit,
+  } = useCompletion();
+
+  // Function to parse completion result and render bold text properly
+  const renderCompletionText = (text: string) => {
+    return text.split("**").map((chunk, index) => {
+      return index % 2 === 0 ? (
+        <span key={index}>{chunk}</span>
+      ) : (
+        <strong key={index}>{chunk}</strong>
+      );
+    });
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="mx-auto w-full max-w-md py-8 px-4 md:px-0 flex flex-col items-center">
+      <div className="chat-bubble bg-gray-900 p-4 rounded-lg mb-4">
+        <span className="text-white text-lg">Bot:</span>{" "}
+        {renderCompletionText(completion)}
+      </div>
+      <form onSubmit={handleSubmit} className="w-full max-w-sm">
+        {/* <label className="block mb-4">
+          <span className="text-gray-900">Say something...</span>
+          <input
+            className="mt-1 block w-full rounded-md border-gray-900 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            value={input}
+            onChange={handleInputChange}
+          />
+        </label> */}
+
+        <label className="input input-bordered flex items-center gap-2 mb-5">
+          <input
+            type="text"
+            className="grow"
+            placeholder="Search"
+            value={input}
+            onChange={handleInputChange}
+          />
+          <kbd className="kbd kbd-sm"> ↵ </kbd>
+          {/* <kbd className="kbd kbd-sm">K</kbd> */}
+        </label>
+        <div className="flex justify-between">
+          <button
+            type="button"
+            onClick={stop}
+            className="btn btn-outline btn-default text-blue relative"
           >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+            {isLoading && (
+              <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.373A8.001 8.001 0 0112 4v4a4 4 0 00-4 4H6zm10-2v4a4 4 0 004-4h-4zm0-4a8.001 8.001 0 01-7.373 7.995L10 17.372V20a4 4 0 004-4h4zm-2-7.373A8.001 8.001 0 0120 12h-4a4 4 0 00-4-4V6z"
+                  ></path>
+                </svg>
+              </span>
+            )}
+            Stop
+          </button>
+          <button
+            disabled={isLoading}
+            type="submit"
+            className="btn glass text-blue btn-outline btn-secondary"
+          >
+            {isLoading ? "Sending..." : "Send"}
+          </button>
         </div>
-      </div>
-
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+      </form>
+    </div>
   );
 }
+
+
