@@ -1,40 +1,5 @@
 "use client";
 
-// import { useCompletion } from 'ai/react';
-
-// export default function Completion() {
-//   const {
-//     completion,
-//     input,
-//     stop,
-//     isLoading,
-//     handleInputChange,
-//     handleSubmit,
-//   } = useCompletion();
-
-//   return (
-//     <div className="mx-auto w-full max-w-md py-24 flex flex-col stretch">
-//       <form onSubmit={handleSubmit}>
-//         <label>
-//           Say something...
-//           <input
-//             className="input input-bordered w-full max-w-xs"
-//             value={input}
-//             onChange={handleInputChange}
-//           />
-//         </label>
-//         <output>Completion result: {completion}</output>
-//         <button type="button" onClick={stop}>
-//           Stop
-//         </button>
-//         <button disabled={isLoading} type="submit">
-//           Send
-//         </button>
-//       </form>
-//     </div>
-//   );
-// }
-
 import { useCompletion } from "ai/react";
 
 export default function Completion() {
